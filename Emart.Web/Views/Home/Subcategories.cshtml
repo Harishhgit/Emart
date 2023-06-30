@@ -1,0 +1,37 @@
+@model IEnumerable<Emart.Data.ItemSubCategory>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemSubCategoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemSubCategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemCategoryId)
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var itemsubcat in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelSub => itemsubcat.ItemSubCategoryId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelSub => itemsubcat.ItemSubCategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelSub => itemsubcat.ItemCategoryId)
+                </td>
+                <td>
+                    <a asp-action="DeleteSubCategory" asp-route-id="@itemsubcat.ItemSubCategoryId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

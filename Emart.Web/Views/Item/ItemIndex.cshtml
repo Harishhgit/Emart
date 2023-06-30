@@ -1,0 +1,140 @@
+@model IEnumerable<Item>
+
+<form>
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-3">
+                    <label for="ItemCategoryId" class="col-form-label">Product Categories</label>
+                </div>
+                <div class="col-3">
+                    <select id="ItemCategoryId" class="form-select" asp-items="@ViewBag.ItemCategories">
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+                <div></div>
+                <div class="col-3">
+                    <label for="ItemSubCategoryId" class="col-form-label">Product Subategories</label>
+                </div>
+                <div class="col-3">
+                    <select id="ItemSubCategoryId" class="form-select">
+                        <option value="">Select Subcategory</option>
+                    </select>
+                </div> 
+            </div>                     
+        </div>       
+    </div>
+    <div class="container row" id="Emart-items">
+        @foreach(var product in Model)
+        {
+
+        <div class="col-4 ">
+            <div class="p-0 my-3 border">
+                <div class="card">
+                    <img src="@product.ImageUrl" class="card-img-top">
+                    <div class="card-body">
+                        <h3 class="card-title text-success">@product.ItemName</h3>
+                        <span class="badge badge-light mb-2 ">@product.ItemCategory</span>
+                        <span class="badge badge-light mb-2 ">@product.ItemSubCategory</span>
+                        <p class="card-text">@Html.Raw(@product.Description)</p>
+                        <div class="row">
+                            <div class="col pt-1">
+                                <span style="font-size:23px;">&#8377; @product.Price</span>
+                            </div>
+                            <div class="col">
+                                @* <a asp-action="Details" asp-route-ItemId="@product.ItemId" class="btn btn-success form-control">Details</a> *@
+                                <a asp-action="UpdateItemData" asp-route-id="@product.ItemId" class="btn btn-success form-control">Edit</a>
+                                <a asp-action="DeleteItemData" asp-route-id="@product.ItemId" class="btn btn-danger form-control">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        }
+    </div>
+</form>
+
+@section Scripts 
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    $(document).ready(function()
+    {    
+        $("#ItemCategoryId").change(function()
+        {
+            $("#ItemSubCategoryId").empty();
+            $.ajax
+            ({
+                type: 'GET',
+                url: '@Url.Action("GetItemSubCategories")', // Calling json method
+                dataType: 'json',
+                data: { id: $("#ItemCategoryId").val() },
+                // Get Selected Country ID.
+                success: function (subcategories) 
+                {
+                    console.log($("#ItemCategoryId").val());
+                    console.log(subcategories);
+                    $("#ItemSubCategoryId").append('<option value= "" > Select ItemSubCategory </option>');
+                    $.each(subcategories, function (i, product) {
+                        $("#ItemSubCategoryId").append('<option value="' + product.value + '">' + product.text + '</option>');
+                    });
+                }               
+            });
+        });
+
+        $("#ItemSubCategoryId").change(function()
+        {
+            var categoryId = $("#ItemCategoryId").val();
+            var subcategoryId = $("#ItemSubCategoryId").val();
+            $('.container > div').remove();
+            $.ajax
+            ({
+                type: 'GET',
+                url: '@Url.Action("FinalItems")',
+                dataType: 'json',
+                data: { catId: $("#ItemCategoryId").val(), SubId: $("#ItemSubCategoryId").val() },
+                success: function (items){
+                                        console.log($("#ItemCategoryId").val());
+                                        console.log($("#ItemSubCategoryId").val());
+                                        console.log(items);
+                                        /* var itemsContainer = $("#Emart-items");
+                                        itemsContainer.remove(); */
+                                        
+                                        $.each(items, function (i, product)
+                                        { 
+
+                                         const card = document.createElement('div');
+                                         card.classList = 'card-body';
+
+                                         const contenter =
+                                                    `<div class="col-4 ">
+                                                            <div class="p-0 my-3 border">
+                                                                <div class="card">
+                                                                    <img src= ${product.imageUrl} class="card-img-top">
+                                                                        <div class="card-body">
+                                                                            <h3 class="card-title text-success">${product.itemName}</h3>
+                                                                                <span class="badge badge-light mb-2 ">${product.itemCategory}</span>
+                                                                                <span class="badge badge-light mb-2 ">${product.itemSubCategory}</span>
+                                                                            <p class="card-text">${product.description}</p>
+                                                                            <div class="row">
+                                                                              <div class="col pt-1">
+                                                                                <span style="font-size:23px;">&#8377; ${product.price}</span>
+                                                                              </div>
+                                                                            </div>
+                                                                        </div>
+                                                                </div>
+                                                            </div>
+                                                     </div>`;
+
+                                            $('#Emart-items').append(contenter);
+                                        });
+                                     } 
+                });
+        });                   
+    });
+    </script>
+} 

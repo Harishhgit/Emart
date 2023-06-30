@@ -1,0 +1,29 @@
+@model Emart.Data.ItemCategory
+
+<form asp-action="CreateCategory">
+    <span class="text-warning">@ViewBag.cat</span>
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-success">Create ItemCategory</h1>
+        <hr />
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="col-2">
+                <label asp-for="ItemCategoryName" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="ItemCategoryName" class="form-control" />
+                <span asp-validation-for="ItemCategoryName" class="text-danger"></span>
+            </div>
+
+            <div class="col-5">
+                <input type="submit" value="Create" class="btn btn-success form-control" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

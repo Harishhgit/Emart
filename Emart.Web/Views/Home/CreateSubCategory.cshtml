@@ -1,0 +1,36 @@
+@model Emart.Data.ItemSubCategory
+
+<form asp-action="CreateSubCategory">
+    <span class="text-warning">@ViewBag.sub</span>
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-success">Create ItemSubCategory</h1>
+        <hr />
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="col-2">
+                <label asp-for="ItemSubCategoryName" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="ItemSubCategoryName" class="form-control" />
+                <span asp-validation-for="ItemSubCategoryName" class="text-danger"></span>
+            </div>
+            <div class="col-2">
+                <label asp-for="ItemCategoryId" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="ItemCategoryId" class="form-control" />
+                <span asp-validation-for="ItemCategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="col-5">
+                <input type="submit" value="Create" class="btn btn-success form-control" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
